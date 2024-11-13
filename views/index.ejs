@@ -4,5 +4,25 @@
     </head>
     <body>
         <h1>Inventory Application</h1>
+        <ul>
+            <% products.map((product) => { %>
+                <li>
+                    <div>Product: <%= product.product %> </div>
+                    <div>Quantity: <%= product.quantity %> </div>
+                    <div>Price: <%= product.price %> </div>
+                    <div>Description: <%= product.description %></div>
+                    <div>Categories: <%= product.categories %><div>
+                    <form action="/product/<%= product.id %>">
+                        <input type="submit" value="Edit Product">
+                    </form>
+                    <form action="/delete/<%= product.id %>">
+                        <input type="submit" value="Delete Product">
+                    </form>
+                </li>
+            <% }) %>
+           </ul>
+           <form action="/new">Post
+            <input type="submit" value="Create New Product">
+       </form>
     </body>
 </html>
