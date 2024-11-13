@@ -21,8 +21,8 @@
                 <legend>Choose New Product Categories:</legend>
                 <% categories.map((category) => { %>
                     <div>
-                        <input type="checkbox" id=<%= category.id %> name=<%= category.id %> />
-                        <label for=<%= category.id %>><%= category.category %></label>
+                        <input type="checkbox" id=<%= category.category %> name=<%= category.category %> />
+                        <label for=<%= category.category %>><%= category.category %></label>
                     </div>
                 <% }) %>
             </fieldset>

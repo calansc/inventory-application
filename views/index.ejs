@@ -15,14 +15,20 @@
                     <form action="/product/<%= product.id %>">
                         <input type="submit" value="Edit Product">
                     </form>
-                    <form action="/delete/<%= product.id %>">
+                    <form action="/product/delete/<%= product.id %>">
                         <input type="submit" value="Delete Product">
                     </form>
                 </li>
             <% }) %>
-           </ul>
-           <form action="/new">Post
+        </ul>
+        <form action="/new" >
             <input type="submit" value="Create New Product">
-       </form>
+        </form>
+        <form action="/categories" >
+            <input type="submit" value="Category List">
+        </form>
+        <!-- <form action="/new" >
+            <input type="submit" value="Create New Product">
+        </form> -->
     </body>
 </html>
