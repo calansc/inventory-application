@@ -33,12 +33,20 @@ async function postNewProduct(req, res) {
     [req.body.product, req.body.quantity, req.body.price, req.body.description]
   );
 }
-async function postNewCategories(req, res) {
+async function postNewProductCategories(req, res) {
   console.log("postNewCategory: ", req.body[1]);
   console.log("postNewCategory: ", req.body[2]);
   console.log("postNewCategory: ", req.body[3]);
   const id = await getProductId(req, res);
-  console.log(id);
+  const categoryCount = await getCategoryCount();
+  for (let i = 1; i < categoryCount + 1; i++) {
+    if (req.body[i] === "on") {
+      await pool.query(
+        "INSERT INTO product_category (product_id, category_id) VALUES ($1, $2)",
+        [id, i]
+      );
+    }
+  }
 }
 
 // Use a multiselect for the user to select categories
@@ -56,9 +64,18 @@ async function getProductId(req, res) {
   return rows[0].min;
 }
 
+async function getCategoryCount() {
+  console.log("getCategoryCount...");
+  const { rows } = await pool.query("SELECT COUNT(*) FROM categories");
+  console.log("CategoryCount: ", rows[0].count);
+  let categoryCount = rows[0].count;
+  return categoryCount;
+}
+
 module.exports = {
   getProducts,
   getCategories,
   postNewProduct,
-  postNewCategories,
+  postNewProductCategories,
+  getProductId,
 };

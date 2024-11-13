@@ -14,11 +14,16 @@ async function getNew(req, res) {
 }
 
 async function postNew(req, res) {
-  console.log("Controller post new");
-  await db.postNewProduct(req, res);
-  console.log("Controller post new 2");
-  await db.postNewCategories(req, res);
-  res.redirect("/");
+  let existCheck = await db.getProductId(req);
+  if (existCheck) {
+    console.log("exists!");
+  } else {
+    console.log("Controller post new");
+    await db.postNewProduct(req, res);
+    console.log("Controller post new 2");
+    await db.postNewProductCategories(req, res);
+    res.redirect("/");
+  }
 }
 
 module.exports = {
