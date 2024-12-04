@@ -6,9 +6,9 @@ async function getProductsGroup() {
     SELECT products.id, product, quantity, price, description,
     string_agg(category, ', ') AS Categories 
     FROM products
-    INNER JOIN product_category
+    LEFT JOIN product_category
     ON products.id = product_category.product_id
-    INNER JOIN categories
+    LEFT JOIN categories
     ON product_category.category_id = categories.id
     GROUP BY products.id, products.product, products.quantity, products.price, products.description
     ORDER BY products.product
