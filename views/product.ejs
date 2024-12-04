@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title><%= title %></title>
+    </head>
+    <body>
+        <h1>Editing Product: <%= product.product %></h1>
+        <form method="POST" action="/product/<%= product.id %>">
+            <label for="product">Product: </label>
+            <input type="text" id="product" name="product" value="<%= product.product %>">
+            <br/>
+            <label for="quantity">Quantity: </label>
+            <input type="number" id="quantity" name="quantity" value="<%= product.quantity %>">
+            <br/>
+            <label for="price">Price: </label>
+            <input type="number" id="price" name="price" step=".01" value="<%= product.price %>">
+            <br/>
+            <label for="description">Description: </label>
+            <input type="text" id="description" name="description" value="<%= product.description %>">
+            <br/>
+            <fieldset>
+                <legend>Update Product Categories:</legend>
+                <% categories.map((category) => { %>
+                    <% for (let i=0; i < categories.length; i++) { %>
+                        <% if (product.categoryids[i] == category.id) { %>
+                            <div>
+                                <input type="checkbox" id=<%= category.category %> name=<%= category.category %> checked/>
+                                <label for=<%= category.category %>><%= category.category %></label>
+                            </div>
+                      <% } else {%>
+                            <div>
+                                <input type="checkbox" id=<%= category.category %> name=<%= category.category %> />
+                                <label for=<%= category.category %>><%= category.category %></label>
+                            </div>
+                    <% } %>
+                   <% } %>
+
+                <% }) %>
+            </fieldset>
+            <div> <%= product.categoryids[0] %></div>
+            <button type="submit">Save Product Update</button>
+        </form>
+    </body>
+</html>

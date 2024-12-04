@@ -31,6 +31,19 @@ async function getCategories(req, res) {
   res.render("categories", { title: "Categories", categories: rows });
 }
 
+async function getCategoryById(req, res) {}
+
+async function getProductById(req, res) {
+  const rows = await db.queryProductById(req);
+  const categories = await db.getCategories();
+  res.render("product.ejs", {
+    title: "Edit Product",
+    product: rows[0],
+    categories: categories,
+  });
+  // how to 'check' boxes in the product view when a product already has cats
+}
+
 async function getCategoryNew(req, res) {
   const rows = await db.getProducts();
   //   console.log("getCategoryNew products: ", rows);
@@ -56,6 +69,8 @@ module.exports = {
   getNew,
   postNew,
   getCategories,
+  getCategoryById,
+  getProductById,
   getCategoryNew,
   postCategoryNew,
 };

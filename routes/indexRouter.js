@@ -3,6 +3,16 @@ const indexController = require("../controllers/indexController");
 
 const indexRouter = Router();
 
+indexRouter.get("/product/:productId", (req, res) => {
+  // console.log(req.params.productId);
+  indexController.getProductById(req, res);
+});
+
+indexRouter.post("/product/:productId", (req, res) => {
+  indexController.postProductUpdateById(req, res);
+  // Add postProductUpdateById to controller + query
+});
+
 indexRouter.get("/new", (req, res) => {
   //   console.log("Router new get...");
   indexController.getNew(req, res);

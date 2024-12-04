@@ -131,6 +131,24 @@ async function getCategoryCount() {
   return categoryCount;
 }
 
+async function queryProductById(req) {
+  const { rows } = await pool.query(
+    `SELECT products.id, product, quantity, price, description,
+    string_agg(categories.id::text, ', ') AS categoryids FROM products
+    LEFT JOIN product_category
+    ON products.id = product_category.product_id
+    LEFT JOIN categories
+    ON product_category.category_id = categories.id
+    WHERE products.id = ($1)
+    GROUP BY products.id, products.product, products.quantity, products.price, products.description`,
+    [req.params.productId]
+  );
+  console.log(rows);
+  return rows;
+}
+
+async function queryCategoryById() {}
+
 module.exports = {
   getProductsGroup,
   getProducts,
@@ -141,4 +159,6 @@ module.exports = {
   postNewCategoryProducts,
   getProductId,
   getCategoryId,
+  queryProductById,
+  queryCategoryById,
 };
