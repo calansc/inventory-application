@@ -15,7 +15,7 @@
                     <form action="/product/<%= product.id %>">
                         <input type="submit" value="Edit Product">
                     </form>
-                    <form action="/product/delete/<%= product.id %>">
+                    <form method="POST" action="/product/delete/<%= product.id %>">
                         <input type="submit" value="Delete Product">
                     </form>
                 </li>

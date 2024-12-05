@@ -31,7 +31,19 @@ async function getCategories() {
   const { rows } = await pool.query(`
         SELECT * FROM categories;
     `);
-  console.log("getCategories results: ", rows);
+  // console.log("getCategories results: ", rows);
+  return rows;
+}
+
+async function getProductsIdList() {
+  const { rows } = await pool.query(`
+    SELECT id FROM products`);
+  return rows;
+}
+
+async function getCategoriesIdList() {
+  const { rows } = await pool.query(`
+    SELECT id FROM categories`);
   return rows;
 }
 
@@ -134,7 +146,7 @@ async function getCategoryCount() {
 async function queryProductById(req) {
   const { rows } = await pool.query(
     `SELECT products.id, product, quantity, price, description,
-    string_agg(categories.id::text, ', ') AS categoryids FROM products
+    array_agg(categories.id) AS categoryids FROM products
     LEFT JOIN product_category
     ON products.id = product_category.product_id
     LEFT JOIN categories
@@ -147,12 +159,107 @@ async function queryProductById(req) {
   return rows;
 }
 
-async function queryCategoryById() {}
+async function queryCategoryById(req, res) {
+  console.log("queryCategoryById: ", req.params);
+  const { rows } = await pool.query(
+    `SELECT categories.id, category,
+    array_agg(products.id) AS productids FROM categories
+    LEFT JOIN product_category
+    ON categories.id = product_category.category_id
+    LEFT JOIN products
+    ON product_category.product_id = products.id
+    WHERE categories.id = ($1)
+    GROUP BY categories.id, categories.category`,
+    [req.params.categoryId]
+  );
+  // console.log(rows);
+  return rows;
+}
+
+async function updateProductById(req, res) {
+  // console.log("updateProductById query", req.body[1]);
+  await pool.query(
+    `UPDATE products
+    SET product = ($1), quantity = ($2), price = ($3), description = ($4)
+    WHERE id = ($5)`,
+    [
+      req.body["product"],
+      req.body["quantity"],
+      req.body["price"],
+      req.body["description"],
+      req.params["productId"],
+    ]
+  );
+  await pool.query(
+    `DELETE FROM product_category
+    WHERE product_id = ($1)`,
+    [req.params["productId"]]
+  );
+  let categoriesIdList = await getCategoriesIdList();
+  for (let id of categoriesIdList) {
+    if (req.body[id.id] === "on") {
+      await pool.query(
+        "INSERT INTO product_category (product_id, category_id) VALUES ($1, $2)",
+        [req.params["productId"], id.id]
+      );
+    }
+  }
+  // let productsIdList = await getProductsIdList();
+  // // console.log(productsIdList);
+  // for (let id of productsIdList) {
+  //   if (req.body[id.id] === "on") {
+  //     await pool.query(
+  //       `INSERT INTO product_category(product_id, category_id)
+  //       VALUES ($1, $2)`,
+  //       [id.id, req.params["categoryId"]]
+  //     );
+  //   }
+  // }
+}
+
+async function updateCategoryById(req, res) {
+  // console.log("updateCategoryById query", req.body, req.params);
+  // console.log(req.body["category"]);
+  // console.log(req.params["categoryId"]);
+  await pool.query(
+    `UPDATE categories
+    SET category = ($1)
+    WHERE id = ($2)`,
+    [req.body["category"], req.params["categoryId"]]
+  );
+  await pool.query(
+    `DELETE FROM product_category
+    WHERE category_id = ($1)`,
+    [req.params["categoryId"]]
+  );
+  let productsIdList = await getProductsIdList();
+  // console.log(productsIdList);
+  for (let id of productsIdList) {
+    if (req.body[id.id] === "on") {
+      await pool.query(
+        `INSERT INTO product_category(product_id, category_id)
+        VALUES ($1, $2)`,
+        [id.id, req.params["categoryId"]]
+      );
+    }
+  }
+}
+
+async function deleteProduct(req, res) {
+  await pool.query(`DELETE FROM product_category WHERE product_id = ($1)`, [
+    req.params["productId"],
+  ]);
+  await pool.query(`DELETE FROM products WHERE id = ($1)`, [
+    req.params["productId"],
+  ]);
+}
 
 module.exports = {
   getProductsGroup,
   getProducts,
   getCategories,
+  getProductsIdList,
+  getCategoriesIdList,
   postNewProduct,
   postNewCategory,
   postNewProductCategories,
@@ -161,4 +268,7 @@ module.exports = {
   getCategoryId,
   queryProductById,
   queryCategoryById,
+  updateProductById,
+  updateCategoryById,
+  deleteProduct,
 };

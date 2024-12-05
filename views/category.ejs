@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title><%= title %></title>
+    </head>
+    <body>
+        <h1>Editing Category: <%= category.category %></h1>
+        <form method="POST" action="/categories/<%= category.id %>">
+            <label for="category">Category: </label>
+            <input type="text" id="category" name="category" value="<%= category.category %>">
+            <br/>
+            <fieldset>
+                <legend>Update Products in this Category:</legend>
+                <% products.map((product) => { %>
+                        <% if (category.productids.includes(product.id)) { %>
+                            <div>
+                                <input type="checkbox" id=<%= product.id %> name=<%= product.id %> checked/>
+                                <label for=<%= product.id %>><%= product.product %></label>
+                            </div>
+                      <% } else {%>
+                            <div>
+                                <input type="checkbox" id=<%= product.id %> name=<%= product.id %> />
+                                <label for=<%= product.id %>><%= product.product %></label>
+                            </div>
+                    <% } %>
+                <% }) %>
+            </fieldset>
+            <button type="submit">Save Product Update</button>
+        </form>
+        <form action="/categories">
+            <input type="submit" value="Return without saving">
+        </form>
+    </body>
+</html>

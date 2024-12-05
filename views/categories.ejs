@@ -9,10 +9,10 @@
                 <li>
                     <div>ID: <%= category.id %> </div>
                     <div>Category: <%= category.category %> </div>
-                    <form action="/category/<%= category.id %>">
+                    <form action="/categories/<%= category.id %>">
                         <input type="submit" value="Edit Category">
                     </form>
-                    <form action="/category/delete/<%= category.id %>">
+                    <form method="POST" action="/category/delete/<%= category.id %>">
                         <input type="submit" value="Delete Category">
                     </form>
                 </li>

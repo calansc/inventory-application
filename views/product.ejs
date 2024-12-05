@@ -20,24 +20,23 @@
             <fieldset>
                 <legend>Update Product Categories:</legend>
                 <% categories.map((category) => { %>
-                    <% for (let i=0; i < categories.length; i++) { %>
-                        <% if (product.categoryids[i] == category.id) { %>
+                        <% if (product.categoryids.includes(category.id)) { %>
                             <div>
-                                <input type="checkbox" id=<%= category.category %> name=<%= category.category %> checked/>
-                                <label for=<%= category.category %>><%= category.category %></label>
+                                <input type="checkbox" id=<%= category.id %> name=<%= category.id %> checked/>
+                                <label for=<%= category.id %>><%= category.category %></label>
                             </div>
                       <% } else {%>
                             <div>
-                                <input type="checkbox" id=<%= category.category %> name=<%= category.category %> />
-                                <label for=<%= category.category %>><%= category.category %></label>
+                                <input type="checkbox" id=<%= category.id %> name=<%= category.id %> />
+                                <label for=<%= category.id %>><%= category.category %></label>
                             </div>
                     <% } %>
-                   <% } %>
-
                 <% }) %>
             </fieldset>
-            <div> <%= product.categoryids[0] %></div>
             <button type="submit">Save Product Update</button>
+        </form>
+        <form action="/">
+            <input type="submit" value="Return without saving">
         </form>
     </body>
 </html>

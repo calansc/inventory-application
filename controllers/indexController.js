@@ -31,7 +31,22 @@ async function getCategories(req, res) {
   res.render("categories", { title: "Categories", categories: rows });
 }
 
-async function getCategoryById(req, res) {}
+async function getCategoryById(req, res) {
+  const rows = await db.queryCategoryById(req, res);
+  // console.log("getCategoryById controller: ", rows);
+  const products = await db.getProducts();
+  // console.log("getCategoryById controller products: ", products);
+  res.render("category", {
+    title: "Edit Category",
+    category: rows[0],
+    products: products,
+  });
+}
+
+async function postCategoryUpdateById(req, res) {
+  await db.updateCategoryById(req, res);
+  res.redirect("/categories");
+}
 
 async function getProductById(req, res) {
   const rows = await db.queryProductById(req);
@@ -41,7 +56,12 @@ async function getProductById(req, res) {
     product: rows[0],
     categories: categories,
   });
-  // how to 'check' boxes in the product view when a product already has cats
+}
+
+async function postProductUpdateById(req, res) {
+  console.log("postProductUpdateById controller: ", req.body);
+  await db.updateProductById(req, res);
+  res.redirect("/");
 }
 
 async function getCategoryNew(req, res) {
@@ -64,13 +84,21 @@ async function postCategoryNew(req, res) {
   }
 }
 
+async function postDeleteProduct(req, res) {
+  await db.deleteProduct(req, res);
+  res.redirect("/");
+}
+
 module.exports = {
   getProductsGroup,
   getNew,
   postNew,
   getCategories,
   getCategoryById,
+  postCategoryUpdateById,
   getProductById,
+  postProductUpdateById,
   getCategoryNew,
   postCategoryNew,
+  postDeleteProduct,
 };
