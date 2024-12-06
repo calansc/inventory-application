@@ -109,17 +109,17 @@ async function postNewProductCategories(req, res) {
 }
 
 async function postNewCategoryProducts(req, res) {
-  console.log("Full req body... : ", req.body);
+  // console.log("Full req body... : ", req.body);
   const id = await getCategoryId(req, res);
   const productRows = await getProducts();
   for (const product of productRows) {
     let productName = product.product;
     // console.log("CategoryName: ", categoryName);
-    console.log("Request productName: ", req.body[productName]);
+    // console.log("Request productName: ", req.body[productName]);
     if (req.body[productName] === "on") {
-      console.log("if on start...");
+      // console.log("if on start...");
       let productId = await getProductIdByName(productName);
-      console.log("productId: ", productId);
+      // console.log("productId: ", productId);
       await pool.query(
         "INSERT INTO product_category (product_id, category_id) VALUES ($1, $2)",
         [productId, id]
@@ -129,12 +129,12 @@ async function postNewCategoryProducts(req, res) {
 }
 
 async function getProductId(req, res) {
-  console.log("getProductId of product name: ", req.body.product);
+  // console.log("getProductId of product name: ", req.body.product);
   const { rows } = await pool.query(
     "SELECT MIN(id) FROM products WHERE product = ($1)",
     [req.body.product]
   );
-  console.log("getProductId result: ", rows);
+  // console.log("getProductId result: ", rows);
   return rows[0].min;
 }
 async function getProductIdByName(product) {
@@ -145,12 +145,12 @@ async function getProductIdByName(product) {
   return rows[0].min;
 }
 async function getCategoryId(req, res) {
-  console.log("getCategoryId of category name: ", req.body.category);
+  // console.log("getCategoryId of category name: ", req.body.category);
   const { rows } = await pool.query(
     "SELECT MIN(id) FROM categories WHERE category = ($1)",
     [req.body.category]
   );
-  console.log("getCategoryId result: ", rows);
+  // console.log("getCategoryId result: ", rows);
   return rows[0].min;
 }
 async function getCategoryIdByName(category) {
@@ -162,9 +162,9 @@ async function getCategoryIdByName(category) {
 }
 
 async function getCategoryCount() {
-  console.log("getCategoryCount...");
+  // console.log("getCategoryCount...");
   const { rows } = await pool.query("SELECT COUNT(*) FROM categories");
-  console.log("CategoryCount: ", rows[0].count);
+  // console.log("CategoryCount: ", rows[0].count);
   let categoryCount = rows[0].count;
   return categoryCount;
 }
@@ -181,12 +181,12 @@ async function queryProductById(req) {
     GROUP BY products.id, products.product, products.quantity, products.price, products.description`,
     [req.params.productId]
   );
-  console.log(rows);
+  // console.log(rows);
   return rows;
 }
 
 async function queryCategoryById(req, res) {
-  console.log("queryCategoryById: ", req.params);
+  // console.log("queryCategoryById: ", req.params);
   const { rows } = await pool.query(
     `SELECT categories.id, category,
     array_agg(products.id) AS productids FROM categories

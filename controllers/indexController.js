@@ -11,7 +11,7 @@ async function getProductsGroup(req, res) {
 }
 
 async function getNew(req, res) {
-  console.log("Controller getNew");
+  // console.log("Controller getNew");
   const rows = await db.getCategories(req);
   res.render("new", { title: "Create New Product", categories: rows });
 }
@@ -62,7 +62,7 @@ async function getProductById(req, res) {
 }
 
 async function postProductUpdateById(req, res) {
-  console.log("postProductUpdateById controller: ", req.body);
+  // console.log("postProductUpdateById controller: ", req.body);
   await db.updateProductById(req, res);
   res.redirect("/");
 }
@@ -74,7 +74,7 @@ async function getCategoryNew(req, res) {
 }
 
 async function postCategoryNew(req, res) {
-  console.log("postCategoryNew controller: ", req.body.category);
+  // console.log("postCategoryNew controller: ", req.body.category);
   const existCheck = await db.getCategoryId(req);
   if (existCheck) {
     console.log("exists!");
