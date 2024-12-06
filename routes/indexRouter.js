@@ -28,20 +28,20 @@ indexRouter.post("/new", (req, res) => {
   indexController.postNew(req, res);
 });
 
-indexRouter.get("/categories/:categoryId", (req, res) => {
-  indexController.getCategoryById(req, res);
-});
-
-indexRouter.post("/categories/:categoryId", (req, res) => {
-  indexController.postCategoryUpdateById(req, res);
-});
-
 indexRouter.get("/categories/new", (req, res) => {
   indexController.getCategoryNew(req, res);
 });
 
 indexRouter.post("/categories/new", (req, res) => {
   indexController.postCategoryNew(req, res);
+});
+
+indexRouter.get("/categories/:categoryId", (req, res) => {
+  indexController.getCategoryById(req, res);
+});
+
+indexRouter.post("/categories/:categoryId", (req, res) => {
+  indexController.postCategoryUpdateById(req, res);
 });
 
 indexRouter.get("/categories", (req, res) => {

@@ -40,11 +40,23 @@ async function getProducts() {
   return rows;
 }
 
-async function getCategories() {
+async function getCategories(req) {
   //   console.log("getCategories query");
-  const { rows } = await pool.query(`
-        SELECT * FROM categories;
-    `);
+  let order = "id09";
+  if (req.query.order) {
+    order = req.query.order;
+  }
+  const { rows } = await pool.query(
+    `
+        SELECT * FROM categories
+        ORDER BY
+          CASE WHEN $1 = 'alphaAZ' THEN category END ASC,
+          CASE WHEN $1 = 'alphaZA' THEN category END DESC,
+          CASE WHEN $1 = 'id09' THEN id END ASC,
+          CASE WHEN $1 = 'id90' THEN id END DESC
+    `,
+    [order]
+  );
   // console.log("getCategories results: ", rows);
   return rows;
 }

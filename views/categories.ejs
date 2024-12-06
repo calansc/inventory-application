@@ -4,6 +4,19 @@
     </head>
     <body>
         <h1><%= title %></h1>
+        <form action="/categories?value">
+            <label for="order">Order By:</label>
+            <select name="order" id="order">
+                <option value="alphaAZ">Alphabetical (A-Z)</option>
+                <option value="alphaZA">Alphabetical (Z-A)</option>
+                <option value="id09">ID (0-9)</option>
+                <option value="id90">ID (9-0)</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+        <form action="/categories/new" >
+            <input type="submit" value="Create New Category">
+        </form>
         <ul>
             <% categories.map((category) => { %>
                 <li>
@@ -18,8 +31,6 @@
                 </li>
             <% }) %>
         </ul>
-        <form action="/categories/new" >
-            <input type="submit" value="Create New Category">
 
     </body>
 </html>

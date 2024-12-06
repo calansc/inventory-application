@@ -30,14 +30,14 @@ async function postNew(req, res) {
 }
 
 async function getCategories(req, res) {
-  const rows = await db.getCategories();
+  const rows = await db.getCategories(req);
   res.render("categories", { title: "Categories", categories: rows });
 }
 
 async function getCategoryById(req, res) {
   const rows = await db.queryCategoryById(req, res);
   // console.log("getCategoryById controller: ", rows);
-  const products = await db.getProducts();
+  const products = await db.getProducts(req);
   // console.log("getCategoryById controller products: ", products);
   res.render("category", {
     title: "Edit Category",
@@ -68,7 +68,7 @@ async function postProductUpdateById(req, res) {
 }
 
 async function getCategoryNew(req, res) {
-  const rows = await db.getProducts();
+  const rows = await db.getProducts(req);
   //   console.log("getCategoryNew products: ", rows);
   res.render("newCategory", { title: "Create New Category", products: rows });
 }
