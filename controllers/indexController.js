@@ -12,7 +12,7 @@ async function getProductsGroup(req, res) {
 
 async function getNew(req, res) {
   console.log("Controller getNew");
-  const rows = await db.getCategories();
+  const rows = await db.getCategories(req);
   res.render("new", { title: "Create New Product", categories: rows });
 }
 
@@ -53,7 +53,7 @@ async function postCategoryUpdateById(req, res) {
 
 async function getProductById(req, res) {
   const rows = await db.queryProductById(req);
-  const categories = await db.getCategories();
+  const categories = await db.getCategories(req);
   res.render("product.ejs", {
     title: "Edit Product",
     product: rows[0],

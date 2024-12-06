@@ -91,7 +91,7 @@ async function postNewCategory(req, res) {
 async function postNewProductCategories(req, res) {
   //   console.log("Full req body... : ", req.body);
   const id = await getProductId(req, res);
-  const categoryRows = await getCategories();
+  const categoryRows = await getCategories(req);
   for (const category of categoryRows) {
     let categoryName = category.category;
     // console.log("CategoryName: ", categoryName);
