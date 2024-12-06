@@ -1,10 +1,13 @@
 const db = require("../db/queries");
 
 async function getProductsGroup(req, res) {
-  //   console.log("Controller getProducts");
-  const rows = await db.getProductsGroup();
+  // console.log("Index params: ", req.query.order);
+  const rows = await db.getProductsGroup(req);
   //   console.log("Controller getProducts: ", rows);
-  res.render("index", { title: "Inventory Application", products: rows });
+  res.render("index", {
+    title: "Inventory Application",
+    products: rows,
+  });
 }
 
 async function getNew(req, res) {
@@ -76,9 +79,9 @@ async function postCategoryNew(req, res) {
   if (existCheck) {
     console.log("exists!");
   } else {
-    console.log("postCategory new-1");
+    // console.log("postCategory new-1");
     await db.postNewCategory(req, res);
-    console.log("postCategory new-2]");
+    // console.log("postCategory new-2]");
     await db.postNewCategoryProducts(req, res);
     res.redirect("/categories");
   }

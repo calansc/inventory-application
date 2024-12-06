@@ -49,7 +49,7 @@ indexRouter.get("/categories", (req, res) => {
 });
 
 indexRouter.get("/", (req, res) => {
-  //   console.log("Index Router Get...");
+  // console.log("Index Router Get...");
   indexController.getProductsGroup(req, res);
 });
 

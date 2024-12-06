@@ -4,6 +4,17 @@
     </head>
     <body>
         <h1>Inventory Application</h1>
+        <form action="/?value">
+            <label for="order">Order By:</label>
+            <select name="order" id="order">
+                <option value="alphaAZ">Alphabetical (A-Z)</option>
+                <option value="alphaZA">Alphabetical (Z-A)</option>
+                <option value="id09">ID (0-9)</option>
+                <option value="id90">ID (9-0)</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+
         <ul>
             <% products.map((product) => { %>
                 <li>

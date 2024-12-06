@@ -1,8 +1,16 @@
 const pool = require("./pool");
 
-async function getProductsGroup() {
+async function getProductsGroup(req) {
   //   console.log("getProducts query");
-  const { rows } = await pool.query(`
+  let order = "alphaAZ";
+  if (req.query.order) {
+    order = req.query.order;
+  }
+  // if (req.query.order === "id09") {
+  //   order = "products.id";
+  // }
+  const { rows } = await pool.query(
+    `
     SELECT products.id, product, quantity, price, description,
     string_agg(category, ', ') AS Categories 
     FROM products
@@ -11,8 +19,14 @@ async function getProductsGroup() {
     LEFT JOIN categories
     ON product_category.category_id = categories.id
     GROUP BY products.id, products.product, products.quantity, products.price, products.description
-    ORDER BY products.product
-    `);
+    ORDER BY 
+      CASE WHEN $1 = 'alphaAZ' THEN products.product END ASC,
+      CASE WHEN $1 = 'alphaZA' THEN products.product END DESC,
+      CASE WHEN $1 = 'id09' THEN products.id END ASC,
+      CASE WHEN $1 = 'id90' THEN products.id END DESC
+    `,
+    [order]
+  );
   // add in sort by feature on home page with ORDER BY
   //   console.log("getProducts query results: ", rows);
   return rows;
